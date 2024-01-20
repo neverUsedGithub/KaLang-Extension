@@ -179,7 +179,7 @@
         },
         "keyword": {
             "name": "keyword.control",
-            "match": "\\b(with|do|end|if|else|then|for|in|function|while|and|or)\\b"
+            "match": "\\b(with|do|end|if|else|then|for|in|function|while|and|or|return)\\b"
         },
         "strings-double": {
             "name": "string.quoted.double",
