@@ -10,6 +10,7 @@
     "categories": [
         "Programming Languages"
     ],
+    "publisher": "JustCoding123",
     "scripts": {
         "build": "npx tsup",
         "watch": "npx tsup --watch",
