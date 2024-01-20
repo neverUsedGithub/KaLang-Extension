@@ -1,0 +1,60 @@
+{
+    "name": "kalang-support",
+    "displayName": "KaLang Support",
+    "description": "Adds support for KaLang (.ka) files.",
+    "icon": "./icons/k.png",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.85.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "scripts": {
+        "build": "npx tsup",
+        "watch": "npx tsup --watch",
+        "build:ext": "npm run build && vsce package --skip-license --allow-missing-repository --out ./build/extension.vsix"
+    },
+    "main": "./out/client/extension.js",
+    "activationEvents": [
+        "onLanguage:plaintext"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "kalang",
+                "aliases": [
+                    "KaLang",
+                    "kalang"
+                ],
+                "extensions": [
+                    ".ka"
+                ],
+                "configuration": "./language-configuration.json",
+                "icon": {
+                    "dark": "./icons/k.png",
+                    "light": "./icons/k.png"
+                }
+            }
+        ],
+        "grammars": [
+            {
+                "language": "kalang",
+                "scopeName": "source.ka",
+                "path": "./syntaxes/kalang.tmLanguage.json"
+            }
+        ]
+    },
+    "dependencies": {
+        "@types/node": "^20.11.5",
+        "@types/vscode": "^1.85.0",
+        "kalang": "^0.0.1",
+        "vscode-languageclient": "^9.0.1",
+        "vscode-languageserver": "^9.0.1",
+        "vscode-languageserver-textdocument": "^1.0.11"
+    },
+    "devDependencies": {
+        "tsup": "^8.0.1",
+        "typescript": "^5.3.3"
+    }
+}

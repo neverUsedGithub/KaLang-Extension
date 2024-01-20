@@ -1,0 +1,272 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "KaLang",
+    "patterns": [
+        {
+            "include": "#comment-single"
+        },
+        {
+            "include": "#statement"
+        }
+    ],
+    "repository": {
+        "statement": {
+            "patterns": [
+                {
+                    "include": "#comment-single"
+                },
+                {
+                    "include": "#function-declaration"
+                },
+                {
+                    "include": "#for-loop"
+                },
+                {
+                    "include": "#expression"
+                }
+            ]
+        },
+        "expression": {
+            "patterns": [
+                {
+                    "include": "#comment-single"
+                },
+                {
+                    "include": "#strings-double"
+                },
+                {
+                    "include": "#strings-single"
+                },
+                {
+                    "include": "#keyword"
+                },
+                {
+                    "include": "#method-call"
+                },
+                {
+                    "include": "#function-call"
+                },
+                {
+                    "include": "#constant"
+                },
+                {
+                    "include": "#property"
+                },
+                {
+                    "include": "#identifier"
+                },
+                {
+                    "include": "#object"
+                },
+                {
+                    "include": "#array"
+                },
+                {
+                    "include": "#number"
+                },
+                {
+                    "include": "#assignment"
+                },
+                {
+                    "include": "#operator"
+                }
+            ]
+        },
+        "function-declaration": {
+            "begin": "(function)\\s+([[:alpha:]_]\\w*)\\s+(do)",
+            "end": "(end)",
+            "beginCaptures": {
+                "1": {
+                    "name": "keyword.control"
+                },
+                "2": {
+                    "name": "entity.name.function"
+                },
+                "3": {
+                    "name": "keyword.control"
+                }
+            },
+            "endCaptures": {
+                "1": {
+                    "name": "keyword.control"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#statement"
+                }
+            ]
+        },
+        "for-loop": {
+            "begin": "for(?=.+ in ?.*)",
+            "end": "(end)",
+            "beginCaptures": {
+                "0": {
+                    "name": "keyword.control"
+                }
+            },
+            "endCaptures": {
+                "1": {
+                    "name": "keyword.control"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#expression"
+                }
+            ]
+        },
+        "method-call": {
+            "begin": "\\s*(\\.)\\s*([[:alpha:]_]\\w*)\\s*(?=\\()",
+            "end": "(?=\\))",
+            "beginCaptures": {
+                "1": {
+                    "name": "punctuation.accessor"
+                },
+                "2": {
+                    "name": "entity.name.function.member"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#arguments"
+                }
+            ]
+        },
+        "function-call": {
+            "begin": "\\s*([[:alpha:]_]\\w*)\\s*(?=\\()",
+            "end": "(?=\\))",
+            "beginCaptures": {
+                "1": {
+                    "name": "entity.name.function"
+                }
+            },
+            "patterns": [
+                {
+                    "include": "#arguments"
+                }
+            ]
+        },
+        "arguments": {
+            "patterns": [
+                {
+                    "include": "#expression"
+                },
+                {
+                    "match": ",",
+                    "name": "punctuation.separator.comma"
+                }
+            ]
+        },
+        "property": {
+            "match": "(\\.)([[:alpha:]_]\\w*)",
+            "captures": {
+                "1": {
+                    "name": "punctuation.accessor"
+                },
+                "2": {
+                    "name": "variable.other.property"
+                }
+            }
+        },
+        "identifier": {
+            "name": "variable.name",
+            "match": "[[:alpha:]_]\\w*"
+        },
+        "constant": {
+            "name": "variable.other.constant",
+            "match": "[A-Z_][A-Z_0-9]*"
+        },
+        "keyword": {
+            "name": "keyword.control",
+            "match": "\\b(with|do|end|if|else|then|for|in|function|while|and|or)\\b"
+        },
+        "strings-double": {
+            "name": "string.quoted.double",
+            "begin": "\"",
+            "end": "\"",
+            "patterns": [
+                {
+                    "name": "constant.character.escape",
+                    "match": "\\\\."
+                }
+            ]
+        },
+        "strings-single": {
+            "name": "string.quoted.single",
+            "begin": "'",
+            "end": "'",
+            "patterns": [
+                {
+                    "name": "constant.character.escape",
+                    "match": "\\\\."
+                }
+            ]
+        },
+        "array": {
+            "begin": "\\[",
+            "end": "\\]",
+            "patterns": [
+                {
+                    "include": "#expression"
+                },
+                {
+                    "name": "punctuation.separator.comma",
+                    "match": ","
+                }
+            ]
+        },
+        "number": {
+            "name": "constant.numeric",
+            "match": "\\d+"
+        },
+        "operator": {
+            "name": "keyword.operator",
+            "match": "==|!=|<=|>=|<|>|\\+|-|\\*|/|%|\\.\\."
+        },
+        "assignment": {
+            "name": "keyword.operator.assignment",
+            "match": "="
+        },
+        "object": {
+            "begin": "\\{",
+            "end": "\\}",
+            "patterns": [
+                {
+                    "name": "meta.object-literal.key string.quoted.double",
+                    "begin": "\"",
+                    "end": "\"",
+                    "patterns": [
+                        {
+                            "name": "constant.character.escape",
+                            "match": "\\\\."
+                        }
+                    ]
+                },
+                {
+                    "name": "meta.object-literal.key string.quoted.single",
+                    "begin": "'",
+                    "end": "'",
+                    "patterns": [
+                        {
+                            "name": "constant.character.escape",
+                            "match": "\\\\."
+                        }
+                    ]
+                },
+                {
+                    "name": "punctuation.separator.key-value",
+                    "match": ":"
+                },
+                {
+                    "include": "#expression"
+                }
+            ]
+        },
+        "comment-single": {
+            "match": "#[^\\n]*",
+            "name": "comment.line"
+        }
+    },
+    "scopeName": "source.ka"
+}

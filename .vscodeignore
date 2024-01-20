@@ -1,0 +1,13 @@
+.vscode/**
+.vscode-test/**
+.gitignore
+.prettierc
+kalang-support*.vsix
+vsc-extension-quickstart.md
+tsup.config.js
+tsconfig.jsoon
+package-lock.jsoon
+client/**
+server/**
+node_modules/**
+build/**
