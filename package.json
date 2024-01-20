@@ -13,8 +13,13 @@
     "scripts": {
         "build": "npx tsup",
         "watch": "npx tsup --watch",
-        "build:ext": "npm run build && vsce package --skip-license --allow-missing-repository --out ./build/extension.vsix"
+        "build:ext": "npm run build && vsce package --out ./build/extension.vsix"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/neverUsedGithub/KaLang-Extension.git"
+    },
+    "homepage": "https://github.com/neverUsedGithub/KaLang-Extension",
     "main": "./out/client/extension.js",
     "activationEvents": [
         "onLanguage:plaintext"
