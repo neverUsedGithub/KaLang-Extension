@@ -15,7 +15,7 @@ import {
 import { TextDocument } from "vscode-languageserver-textdocument";
 
 import { LexingError, Lexer, Token, TokenType } from "kalang/lexer";
-import { Parser, ParserNode, ParsingError } from "kalang/parser";
+import { ExternVariableType, Parser, ParserNode, ParsingError } from "kalang/parser";
 import { ASTVisitor } from "kalang/visitor";
 
 // Create a connection for the server, using Node's IPC as a transport.
@@ -135,18 +135,31 @@ connection.onCompletion(async (_textDocumentPosition: TextDocumentPositionParams
         return [];
     }
 
-    const allVars = scope.listVariables();
-    const allFuncts = scope.listFunctions();
+    const allSymbols = scope.list();
 
     const completionItems: CompletionItem[] = [];
 
-    for (const item of [...allVars, ...allFuncts]) {
-        const pos = item[1].definedAt;
+    for (const external of visitor.externVariables.entries()) {
+        completionItems.push({
+            label: external[0],
+            kind: external[1] === ExternVariableType.CLASS ? CompletionItemKind.Class : CompletionItemKind.Variable,
+        });
+    }
+
+    for (const item of allSymbols) {
+        const pos = item.meta.definedAt;
+
+        console.log(item);
 
         if (pos.line <= cursor.line && pos.col <= cursor.col) {
             completionItems.push({
-                label: item[0],
-                kind: item[1].type === "function" ? CompletionItemKind.Function : CompletionItemKind.Variable,
+                label: item.name,
+                kind:
+                    item.meta.type === "function"
+                        ? CompletionItemKind.Function
+                        : item.meta.type === "class"
+                        ? CompletionItemKind.Class
+                        : CompletionItemKind.Variable,
             });
         }
     }
