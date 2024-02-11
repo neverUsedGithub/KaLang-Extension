@@ -56,9 +56,6 @@
                     "include": "#identifier"
                 },
                 {
-                    "include": "#object"
-                },
-                {
                     "include": "#array"
                 },
                 {
@@ -69,6 +66,9 @@
                 },
                 {
                     "include": "#operator"
+                },
+                {
+                    "include": "#punctuation"
                 }
             ]
         },
@@ -224,44 +224,13 @@
             "name": "keyword.operator",
             "match": "==|!=|<=|>=|<|>|\\+|-|\\*|/|%|\\.\\."
         },
+        "punctuation": {
+            "name": "punctuation",
+            "match": ":|\\{|\\}"
+        },
         "assignment": {
             "name": "keyword.operator.assignment",
             "match": "="
-        },
-        "object": {
-            "begin": "\\{",
-            "end": "\\}",
-            "patterns": [
-                {
-                    "name": "meta.object-literal.key string.quoted.double",
-                    "begin": "\"",
-                    "end": "\"",
-                    "patterns": [
-                        {
-                            "name": "constant.character.escape",
-                            "match": "\\\\."
-                        }
-                    ]
-                },
-                {
-                    "name": "meta.object-literal.key string.quoted.single",
-                    "begin": "'",
-                    "end": "'",
-                    "patterns": [
-                        {
-                            "name": "constant.character.escape",
-                            "match": "\\\\."
-                        }
-                    ]
-                },
-                {
-                    "name": "punctuation.separator.key-value",
-                    "match": ":"
-                },
-                {
-                    "include": "#expression"
-                }
-            ]
         },
         "comment-single": {
             "match": "#[^\\n]*",

@@ -142,7 +142,7 @@ connection.onCompletion(async (_textDocumentPosition: TextDocumentPositionParams
     for (const external of visitor.externVariables.entries()) {
         completionItems.push({
             label: external[0],
-            kind: external[1] === ExternVariableType.CLASS ? CompletionItemKind.Class : CompletionItemKind.Variable,
+            kind: CompletionItemKind.Variable,
         });
     }
 
