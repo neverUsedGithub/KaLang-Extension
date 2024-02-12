@@ -317,7 +317,7 @@
         },
         "number": {
             "name": "constant.numeric",
-            "match": "\\d+"
+            "match": "\\d+(\\.\\d*)"
         },
         "operator": {
             "name": "keyword.operator",
