@@ -17,6 +17,7 @@ import { TextDocument } from "vscode-languageserver-textdocument";
 import { LexingError, Lexer, Token, TokenType } from "kalang/lexer";
 import { ExternVariableType, Parser, ParserNode, ParsingError } from "kalang/parser";
 import { ASTVisitor } from "kalang/visitor";
+import { Transpiler, TranspilingError } from "kalang/transpiler";
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -86,13 +87,38 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
         }
     } while (!token || token.type !== TokenType.EOF);
 
+    let root: ParserNode | null = null;
+
     if (diagnostics.length === 0) {
         const parser = new Parser(tokens);
 
         try {
-            parser.parse();
+            root = parser.parse();
         } catch (e) {
             if (e instanceof ParsingError) {
+                diagnostics.push({
+                    message: e.reason,
+                    range: {
+                        start: textDocument.positionAt(e.span.start.index),
+                        end: textDocument.positionAt(e.span.end.index + 1),
+                    },
+                });
+            }
+        }
+    }
+
+    const filepath = decodeURIComponent(textDocument.uri).replace("file:///", "");
+    if (diagnostics.length === 0 && root) {
+        const transpiler = new Transpiler(root, filepath, {
+            exists(path) {
+                return true;
+            },
+        });
+
+        try {
+            transpiler.transpile();
+        } catch (e) {
+            if (e instanceof TranspilingError) {
                 diagnostics.push({
                     message: e.reason,
                     range: {
@@ -148,8 +174,6 @@ connection.onCompletion(async (_textDocumentPosition: TextDocumentPositionParams
 
     for (const item of allSymbols) {
         const pos = item.meta.definedAt;
-
-        console.log(item);
 
         if (pos.line <= cursor.line && pos.col <= cursor.col) {
             completionItems.push({

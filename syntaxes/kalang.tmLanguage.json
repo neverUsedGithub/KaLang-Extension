@@ -255,7 +255,7 @@
         },
         "keyword": {
             "name": "keyword.control",
-            "match": "\\b(with|do|end|if|else|then|for|in|function|while|and|or|return|extern|class|local|new|break|continue)\\b"
+            "match": "\\b(with|do|end|if|else|then|for|in|function|while|and|or|return|extern|class|local|new|break|continue|import|export|from|default)\\b"
         },
         "builtins": {
             "patterns": [
