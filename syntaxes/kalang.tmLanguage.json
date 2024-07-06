@@ -317,7 +317,7 @@
         },
         "number": {
             "name": "constant.numeric",
-            "match": "\\d+(\\.\\d*)?"
+            "match": "\\d+(\\.\\d+)?"
         },
         "operator": {
             "name": "keyword.operator",
@@ -329,7 +329,7 @@
         },
         "assignment": {
             "name": "keyword.operator.assignment",
-            "match": "="
+            "match": "=|\\+=|-=|\\*=|/=|%=|&&=|\\|\\|="
         },
         "comment-single": {
             "match": "#[^\\n]*",

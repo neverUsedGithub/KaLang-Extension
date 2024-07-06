@@ -15,53 +15,29 @@ import {
 import { TextDocument } from "vscode-languageserver-textdocument";
 
 import { LexingError, Lexer, Token, TokenType } from "kalang/lexer";
-import { ExternVariableType, Parser, ParserNode, ParsingError } from "kalang/parser";
+import { Parser, ParserNode, ParsingError } from "kalang/parser";
 import { ASTVisitor } from "kalang/visitor";
 import { Transpiler, TranspilingError } from "kalang/transpiler";
 
-// Create a connection for the server, using Node's IPC as a transport.
-// Also include all preview / proposed LSP features.
 const connection = createConnection(ProposedFeatures.all);
 
-// Create a simple text document manager.
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
 connection.onInitialize((params: InitializeParams) => {
     const result: InitializeResult = {
         capabilities: {
             textDocumentSync: TextDocumentSyncKind.Incremental,
-            // Tell the client that this server supports code completion.
-            // completionProvider: {
-            //     resolveProvider: true,
-            // },
             completionProvider: {},
         },
     };
     return result;
 });
 
-// connection.onInitialized(() => {
-// });
-
-// The content of a text document has changed. This event is emitted
-// when the text document first opened or when its content has changed.
 documents.onDidChangeContent((change) => {
     validateTextDocument(change.document);
 });
 
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
-    // connection.sendDiagnostics({
-    //     uri: textDocument.uri,
-    //     diagnostics: [
-    //         {
-    //             severity: DiagnosticSeverity.Error,
-    //             range: { start: textDocument.positionAt(0), end: textDocument.positionAt(2) },
-    //             message: "test error",
-    //             source: "ex",
-    //         } satisfies Diagnostic,
-    //     ],
-    // });
-
     const diagnostics: Diagnostic[] = [];
 
     const lexer = new Lexer(textDocument.getText());
@@ -136,7 +112,6 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
     });
 }
 
-// This handler provides the initial list of the completion items.
 connection.onCompletion(async (_textDocumentPosition: TextDocumentPositionParams): Promise<CompletionItem[]> => {
     const cursor = { line: _textDocumentPosition.position.line, col: _textDocumentPosition.position.character };
     const text = documents.get(_textDocumentPosition.textDocument.uri)!.getText();
@@ -189,36 +164,7 @@ connection.onCompletion(async (_textDocumentPosition: TextDocumentPositionParams
     }
 
     return completionItems;
-    // return [
-    //     {
-    //         label: "TypeScript",
-    //         kind: CompletionItemKind.Text,
-    //         data: 1,
-    //     },
-    //     {
-    //         label: "JavaScript",
-    //         kind: CompletionItemKind.Text,
-    //         data: 2,
-    //     },
-    // ];
 });
 
-// // This handler resolves additional information for the item selected in
-// // the completion list.
-// connection.onCompletionResolve((item: CompletionItem): CompletionItem => {
-//     if (item.data === 1) {
-//         item.detail = "TypeScript details";
-//         item.documentation = "TypeScript documentation";
-//     } else if (item.data === 2) {
-//         item.detail = "JavaScript details";
-//         item.documentation = "JavaScript documentation";
-//     }
-//     return item;
-// });
-
-// Make the text document manager listen on the connection
-// for open, change and close text document events
 documents.listen(connection);
-
-// Listen on the connection
 connection.listen();
