@@ -62,6 +62,9 @@
                     "include": "#property"
                 },
                 {
+                    "include": "#boolean"
+                },
+                {
                     "include": "#identifier"
                 },
                 {
@@ -252,6 +255,10 @@
         "constant": {
             "name": "variable.other.constant",
             "match": "[A-Z_][A-Z_0-9]*"
+        },
+        "boolean": {
+            "name": "constant.language.boolean",
+            "match": "true|false"
         },
         "keyword": {
             "name": "keyword.control",
